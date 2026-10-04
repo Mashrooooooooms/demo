@@ -2,7 +2,7 @@
   <div class="main">
     <header class="main__header">
       <p class="main__note">Демонстрационный материал, все совпадения случайны</p>
-      <h1 class="main__title">Main</h1>
+      <h1 class="main__title"></h1>
     </header>
 
     <main class="main__content">

@@ -192,8 +192,8 @@ function initCharts() {
       tooltip: { ...TOOLTIP, trigger: 'item', formatter: '{b}: {c} ({d}%)' },
       series: [{
         type: 'pie',
-        radius: ['55%', '75%'],
-        center: ['50%', '45%'],
+        radius: ['58%', '78%'],
+        center: ['50%', '50%'],
         avoidLabelOverlap: true,
         itemStyle: { borderColor: 'rgba(0,0,0,0.5)', borderWidth: 2, borderRadius: 6 },
         label: { show: false },
@@ -293,7 +293,7 @@ function initCharts() {
       tooltip: { ...TOOLTIP, trigger: 'axis', axisPointer: { type: 'shadow' } },
       xAxis: {
         type: 'value', axisLine: { show: false }, axisTick: { show: false }, splitLine: SPLIT_LINE,
-        axisLabel: { color: 'rgba(244, 236, 223, 0.7)', fontSize: 13, formatter: '{value}%' }, max: 100,
+        axisLabel: { color: 'rgba(244, 236, 223, 0.7)', fontSize: 13, formatter: '{value}%', max: 100 },
       },
       yAxis: {
         type: 'category', data: halls, axisLine: AXIS_LINE, axisTick: { show: false },
@@ -395,41 +395,49 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   display: flex;
   flex-direction: column;
+
   width: 100%;
   height: 100%;
-  min-height: 600px;
+
+  min-height: 0;
+
   padding: 24px 32px;
   color: $text;
+
   overflow: hidden;
-  
+
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-radius: 16px;
 
+  box-sizing: border-box;
+
   &__stage {
     position: relative;
     z-index: 1;
+
     flex: 1;
+    min-height: 0;
+
     display: grid;
     grid-template-columns: 340px 1fr;
     gap: 20px;
+
     height: 100%;
-    min-height: 0;
   }
 }
 
 .stage__left {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 0;
 }
 
 .stage__right {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: 100%;
   min-height: 0;
 }
 
@@ -524,6 +532,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   &--donut {
     flex: 1;
+    min-height: 0;
     .crm.is-visible & { animation-delay: 0.2s; }
   }
 
@@ -614,6 +623,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
 }
 
 .bots__head { margin-bottom: 4px; }
@@ -639,6 +649,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   background-color: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(200, 170, 135, 0.15);
   border-radius: 12px;
+  min-width: 0;
   opacity: 0;
   .crm.is-visible & { animation: fade-in 0.8s $ease-soft 0.5s both; }
 
@@ -680,7 +691,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     flex-direction: column;
     gap: 4px;
     margin-top: 4px;
-    
+
     li {
       display: flex;
       justify-content: space-between;
@@ -696,23 +707,152 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 }
 
-/* --- Адаптив --- */
+/* ==========================================================================
+   ПЛАНШЕТ / УЗКИЙ ДЕСКТОП
+   ========================================================================== */
+
 @media (max-width: 1200px) {
+  .crm {
+    padding: 20px 22px;
+  }
+
   .crm__stage {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+
     overflow-y: auto;
+    overscroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
   }
-  .stage__left { height: 350px; }
-  .charts-row, .bottom-row {
+
+  .stage__left { height: auto; }
+  .stage__right { height: auto; }
+
+  .chart--donut {
+    min-height: 300px;
+  }
+
+  .charts-row,
+  .bottom-row {
     grid-template-columns: 1fr;
+    flex: 0 0 auto;
   }
+
+  .charts-row .chart { min-height: 240px; }
+  .bottom-row .chart { min-height: 200px; }
+
   .bots__grid {
     grid-template-columns: 1fr;
   }
 }
 
+/* ==========================================================================
+   МОБИЛЬНАЯ ВЕРСИЯ
+   ========================================================================== */
+
 @media (max-width: 768px) {
-  .crm { padding: 16px; }
-  .kpi { grid-template-columns: 1fr 1fr; }
+  .crm {
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+
+  .crm__stage {
+    gap: 10px;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+  }
+
+  /* KPI — 2×2 */
+  .kpi {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .kpi__card {
+    padding: 12px 14px;
+    gap: 4px;
+  }
+
+  .kpi__label { font-size: 0.65rem; letter-spacing: 0.08em; }
+  .kpi__value { font-size: 1.15rem; }
+  .kpi__delta { font-size: 0.7rem; }
+
+  /* Графики */
+  .stage__right { gap: 10px; }
+
+  .charts-row,
+  .bottom-row { gap: 10px; }
+
+  .chart {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .chart__head { margin-bottom: 6px; }
+  .chart__title { font-size: 0.9rem; }
+  .chart__sub   { font-size: 0.6rem; letter-spacing: 0.08em; }
+
+  /* Donut — компактнее, только как декор */
+  .chart--donut {
+    min-height: 180px;
+    padding: 12px;
+  }
+
+  .chart--donut .chart__body {
+    gap: 0;
+  }
+
+  .chart--donut .chart__canvas {
+    flex: 0 0 140px;
+    max-width: 140px;
+  }
+
+  /* Легенду прячем — данные уже есть в KPI */
+  .legend { display: none; }
+
+  .charts-row .chart { min-height: 170px; }
+  .bottom-row .chart { min-height: 150px; }
+
+  /* Боты — компактно */
+  .bots { gap: 8px; }
+  .bots__label { font-size: 0.7rem; letter-spacing: 0.1em; }
+
+  .bots__grid { gap: 8px; }
+
+  .bot {
+    padding: 10px 12px;
+    gap: 10px;
+    border-radius: 10px;
+  }
+
+  .bot__icon { width: 34px; height: 34px; border-radius: 8px; }
+  .bot__icon-glyph { font-size: 1.1rem; }
+  .bot__name { font-size: 0.9rem; }
+  .bot__metrics li { font-size: 0.75rem; gap: 6px; }
+  .bot__metrics li b { font-size: 0.75rem; }
+}
+
+@media (max-width: 400px) {
+  .crm { padding: 10px 12px; }
+
+  .kpi__value { font-size: 1rem; }
+  .kpi__label { font-size: 0.6rem; }
+
+  .chart { padding: 12px; }
+  .chart__title { font-size: 0.85rem; }
+
+  .chart--donut { min-height: 160px; }
+  .chart--donut .chart__canvas {
+    flex: 0 0 120px;
+    max-width: 120px;
+  }
+  .charts-row .chart { min-height: 160px; }
+  .bottom-row .chart { min-height: 140px; }
 }
 </style>
