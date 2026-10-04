@@ -42,7 +42,7 @@
         <span class="hero__example-label">Пример работы</span>
 
         <div class="example">
-          <span class="example__name">Этот сайт — один из наших проектов</span>
+          <span class="example__name">Этот сайт — пример разработки проекта</span>
           <span class="example__meta">Vue 3 · SCSS · ECharts · 2026</span>
           <span class="example__arrow">↓</span>
         </div>

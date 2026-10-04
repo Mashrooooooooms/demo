@@ -17,6 +17,80 @@
       <span class="marker marker--bl" aria-hidden="true">+</span>
       <span class="marker marker--br" aria-hidden="true">+</span>
 
+      <!-- ============================================================
+           СНОСКИ: объясняют формы, пропорции и логику коллажа
+           ============================================================ -->
+
+      <!-- Сетка + маркеры -->
+      <div class="anno anno--grid">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Каркас</b>
+          <em>Сетка 72 px + маркеры по углам — техническая рамка листа.</em>
+        </span>
+      </div>
+
+      <!-- Портретный кадр -->
+      <div class="anno anno--portrait">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Форма 3:4</b>
+          <em>Портретный кадр — задаёт вертикальный ритм слева.</em>
+        </span>
+      </div>
+
+      <!-- Широкий кадр -->
+      <div class="anno anno--landscape">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Форма 4:3</b>
+          <em>Широкий кадр — разряжает плотность и даёт воздух.</em>
+        </span>
+      </div>
+
+      <!-- Квадрат -->
+      <div class="anno anno--square">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Форма 1:1</b>
+          <em>Квадрат — плотный центр, точка опоры взгляда.</em>
+        </span>
+      </div>
+
+      <!-- Вертикаль -->
+      <div class="anno anno--tall">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Форма 2:5</b>
+          <em>Узкая вертикаль — акцент и контраст к широким форматам.</em>
+        </span>
+      </div>
+
+      <!-- Наклон -->
+      <div class="anno anno--tilt">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Наклон ±2–6°</b>
+          <em>Лёгкий поворот каждой плитки — ручная сборка, без линейки.</em>
+        </span>
+      </div>
+
+      <!-- Редакционный блок -->
+      <div class="anno anno--note">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Анкер</b>
+          <em>Редакционный блок по центру — смысловая точка композиции.</em>
+        </span>
+      </div>
+
       <!-- 01 — вертикальный кадр слева -->
       <figure class="tile tile--portrait tile--1">
         <img src="/les.jpg" alt="">
@@ -107,6 +181,10 @@ import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
  *   05 — landscape /vert.webp
  *   06 — square    /komposition.jpg
  *
+ * Сноски объясняют формы (пропорции), наклон, каркас и роль
+ * редакционного блока. На мобилке сноски скрываются,
+ * а сцена (плитки + анкер) пропорционально уменьшается через zoom.
+ *
  * Палитра — кофейная: эспрессо-фон, тёплая бумага, карамельный акцент.
  */
 
@@ -168,10 +246,10 @@ $accent-deep: #8a5a2c;
 $espresso:    #17100c;
 $espresso-2:  #241811;
 
-// --- Отступы блока (скорректированы для подъёма коллажа) ---
+// --- Отступы блока ---
 $padding-x:      5vw;
-$padding-top:    3vh;  // было 5vh
-$padding-bottom: 7vh;  // было 5vh
+$padding-top:    3vh;
+$padding-bottom: 7vh;
 
 // --- Шапка ---
 $label-size:      0.6875rem;
@@ -213,6 +291,11 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   to   { opacity: 1; transform: translate(-50%, -50%) rotate(-1.5deg) scale(1);    }
 }
 
+@keyframes anno-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
 /* ==========================================================================
    БЛОК
    ========================================================================== */
@@ -231,14 +314,6 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   color: $text;
 
   overflow: hidden;
-
-  // --- Мобильное масштабирование ---
-  @media (max-width: 1100px) { zoom: 0.88; }
-  @media (max-width:  900px) { zoom: 0.78; }
-  @media (max-width:  720px) { zoom: 0.66; }
-  @media (max-width:  560px) { zoom: 0.55; }
-  @media (max-width:  440px) { zoom: 0.46; }
-  @media (max-width:  360px) { zoom: 0.40; }
 
   // --- Нижнее тёплое свечение ---
   &__backdrop {
@@ -452,10 +527,6 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     filter: sepia(0.14) saturate(0.88) contrast(1.03) brightness(0.96);
   }
 
-  // ----------------------------------------------------------------
-  //  Подпись
-  // ----------------------------------------------------------------
-
   &__cap {
     position: absolute;
     left: 10px;
@@ -501,22 +572,14 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     color: $ink-soft;
   }
 
-  // ----------------------------------------------------------------
-  //  Геометрия
-  // ----------------------------------------------------------------
-
   &--portrait  { width: 26%; aspect-ratio: 3 / 4;  }
   &--landscape { width: 34%; aspect-ratio: 4 / 3;  }
   &--square    { width: 20%; aspect-ratio: 1 / 1;  }
   &--tall      { width: 14%; aspect-ratio: 2 / 5;  }
 
-  // ----------------------------------------------------------------
-  //  Раскладка (приподнята на ~2% вверх для центровки)
-  // ----------------------------------------------------------------
-
   &--1 {
     left: 3%;
-    top: 8%; // было 10%
+    top: 8%;
 
     --rot: -3deg;
     z-index: 2;
@@ -524,7 +587,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   &--2 {
     left: 25%;
-    top: 0%; // было 2%
+    top: 0%;
 
     --rot:  2deg;
     z-index: 4;
@@ -532,7 +595,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   &--3 {
     right: 24%;
-    top: 12%; // было 14%
+    top: 12%;
 
     --rot: -6deg;
     z-index: 5;
@@ -540,7 +603,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   &--4 {
     right: 6%;
-    top: 4%; // было 6%
+    top: 4%;
 
     --rot:  4deg;
     z-index: 3;
@@ -548,7 +611,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   &--5 {
     left: 12%;
-    bottom: 8%; // было 6%
+    bottom: 8%;
 
     --rot:  3deg;
     z-index: 3;
@@ -556,15 +619,11 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   &--6 {
     right: 28%;
-    bottom: 6%; // было 4%
+    bottom: 6%;
 
     --rot: -2deg;
     z-index: 6;
   }
-
-  // ----------------------------------------------------------------
-  //  Анимация появления
-  // ----------------------------------------------------------------
 
   .collage.is-visible & {
     animation: tile-in 1.05s $ease-soft both;
@@ -586,7 +645,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: absolute;
 
   left: 50%;
-  top: 50%; // было 52%
+  top: 50%;
   transform: translate(-50%, -50%) rotate(-1.5deg);
 
   width: 32%;
@@ -638,5 +697,170 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     text-transform: uppercase;
     color: $accent-deep;
   }
+}
+
+/* ==========================================================================
+   СНОСКИ — кружок → полоса → текст
+   ========================================================================== */
+
+.anno {
+  position: absolute;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  max-width: 240px;
+
+  z-index: 25;
+  pointer-events: none;
+
+  opacity: 0;
+
+  .collage.is-visible & {
+    animation: anno-in 0.7s $ease-soft both;
+  }
+
+  &__dot {
+    flex: none;
+
+    width: 7px;
+    height: 7px;
+    margin-top: 4px;
+
+    border-radius: 50%;
+
+    background-color: $text;
+    box-shadow:
+      0 0 0 3px rgba(242, 233, 220, 0.18),
+      0 0 12px rgba(200, 135, 74, 0.45);
+  }
+
+  &__line {
+    flex: none;
+
+    width: 36px;
+    height: 1px;
+    margin-top: 7px;
+
+    background-color: $text;
+    opacity: 0.7;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    min-width: 0;
+
+    b {
+      font-family: $mono;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+
+      color: $text;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+    }
+
+    em {
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: normal;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.005em;
+      line-height: 1.4;
+
+      color: rgba(242, 233, 220, 0.88);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+/* --- позиции сносок внутри stage --- */
+
+.anno--grid {
+  left: 0;
+  top: -1.5rem;
+
+  .collage.is-visible & { animation-delay: 0.35s; }
+}
+
+.anno--portrait {
+  left: 31%;
+  top: 9%;
+
+  .collage.is-visible & { animation-delay: 0.95s; }
+}
+
+.anno--landscape {
+  left: 26%;
+  bottom: 30%;
+
+  .collage.is-visible & { animation-delay: 1.1s; }
+}
+
+.anno--square {
+  right: 1%;
+  top: 44%;
+
+  .collage.is-visible & { animation-delay: 1.25s; }
+}
+
+.anno--tall {
+  right: 22%;
+  top: -1.5rem;
+
+  .collage.is-visible & { animation-delay: 1.4s; }
+}
+
+.anno--tilt {
+  left: 0;
+  bottom: -0.5rem;
+
+  .collage.is-visible & { animation-delay: 1.55s; }
+}
+
+.anno--note {
+  right: 1%;
+  bottom: 14%;
+
+  .collage.is-visible & { animation-delay: 1.7s; }
+}
+
+/* ==========================================================================
+   АДАПТИВ — уменьшаем ТОЛЬКО сцену (плитки + анкер)
+   Сноски на мобилке скрываются полностью
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .collage__stage { zoom: 0.88; }
+}
+
+@media (max-width: 900px) {
+  .collage__stage { zoom: 0.78; }
+}
+
+@media (max-width: 820px) {
+  /* Сноски на мобилке не нужны — полностью убираем */
+  .anno { display: none !important; }
+}
+
+@media (max-width: 720px) {
+  .collage__stage { zoom: 0.66; }
+}
+
+@media (max-width: 560px) {
+  .collage__stage { zoom: 0.55; }
+}
+
+@media (max-width: 440px) {
+  .collage__stage { zoom: 0.46; }
+}
+
+@media (max-width: 360px) {
+  .collage__stage { zoom: 0.40; }
 }
 </style>

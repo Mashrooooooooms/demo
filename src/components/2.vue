@@ -9,6 +9,80 @@
     </header>
 
     <div class="phones__stage">
+      <!-- ============================================================
+           СНОСКИ: про стиль, приём и мобильный формат
+           ============================================================ -->
+
+      <!-- Два телефона как приём -->
+      <div class="anno anno--duo">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Приём</b>
+          <em>Показываем интерфейс живьём, в привычной рамке телефона. Модно и по делу.</em>
+        </span>
+      </div>
+
+      <!-- Градиент -->
+      <div class="anno anno--gradient anno--right">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Градиент</b>
+          <em>Слева темно, справа растворяется — взгляд сам идёт к телефонам.</em>
+        </span>
+      </div>
+
+      <!-- Светлая тема -->
+      <div class="anno anno--light">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Светлая тема</b>
+          <em>Чисто, доверие, бронь — сценарий «первый раз».</em>
+        </span>
+      </div>
+
+      <!-- Тёмная тема -->
+      <div class="anno anno--dark anno--right">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Тёмная тема</b>
+          <em>Премиум, атмосфера — сценарий «уже в теме».</em>
+        </span>
+      </div>
+
+      <!-- Акцент -->
+      <div class="anno anno--accent anno--right">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Акцент</b>
+          <em>Лаймовый — молодёжный сигнал: «выбрано», «топ».</em>
+        </span>
+      </div>
+
+      <!-- Смещение -->
+      <div class="anno anno--offset">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Смещение</b>
+          <em>Телефоны вразнобой — динамика, не скучная сетка.</em>
+        </span>
+      </div>
+
+      <!-- Мобильный формат / UX -->
+      <div class="anno anno--ux">
+        <span class="anno__dot"></span>
+        <span class="anno__line"></span>
+        <span class="anno__text">
+          <b>Формат</b>
+          <em>Люди бронируют со смартфона — вот так это и выглядит.</em>
+        </span>
+      </div>
+
       <!-- ЛЕВЫЙ ТЕЛЕФОН — светлая тема -->
       <article class="phone phone--left">
         <div class="phone__frame">
@@ -230,6 +304,10 @@ import { reactive, ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
  * Правый: /transport.png → тёмная тема — выбор зала / фотограф / бронь.
  * Фон — градиент: слева тёмно, справа прозрачно.
  *
+ * Сноски объясняют приём (два телефона), контраст тем,
+ * акцентный цвет и мобильный формат. На мобилке сноски скрываются,
+ * а сцена с телефонами пропорционально уменьшается через zoom.
+ *
  * Анимации — на CSS-@keyframes с fill-mode: both.
  * Класс .is-visible ставится/снимается через IntersectionObserver,
  * поэтому при каждом новом заходе секции во вьюпорт анимация
@@ -378,6 +456,10 @@ $radius-chip:   999px;
 // --- Анимация: мягкая, нежная ---
 $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
+// --- Техно-шрифт для сносок ---
+$mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace,
+       SFMono-Regular, Menlo, Consolas, monospace;
+
 /* ==========================================================================
    KEYFRAMES — плавные, с минимальной амплитудой
    ========================================================================== */
@@ -412,6 +494,11 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   to   { transform: scale(1);    }
 }
 
+@keyframes anno-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
 /* ==========================================================================
    БЛОК
    ========================================================================== */
@@ -430,14 +517,6 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   color: $text;
 
   overflow: hidden;
-
-  // --- Мобильное масштабирование ---
-  @media (max-width: 1100px) { zoom: 0.88; }
-  @media (max-width:  900px) { zoom: 0.78; }
-  @media (max-width:  720px) { zoom: 0.66; }
-  @media (max-width:  560px) { zoom: 0.55; }
-  @media (max-width:  440px) { zoom: 0.46; }
-  @media (max-width:  360px) { zoom: 0.40; }
 
   // --- Градиент слева-направо ---
   &__backdrop {
@@ -570,9 +649,6 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     opacity: 0;
   }
 
-  // ВАЖНО: .phones.is-visible — предок, поэтому он идёт первым в селекторе.
-  // Раньше было наоборот (`&--left .phones.is-visible &__frame`), из-за чего
-  // ни один селектор не матчился и контент оставался с opacity: 0.
   .phones.is-visible &--left &__frame {
     animation: phone-in 1.2s $ease-soft 0.4s both;
   }
@@ -818,10 +894,6 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   > * {
     opacity: 0;
   }
-
-  // ВАЖНО: .phones.is-visible — предок, поэтому он идёт первым.
-  // Раньше было `.phone--left .phones.is-visible & > *:nth-child(1)`,
-  // что компилировалось в несуществующую цепочку DOM.
 
   .phones.is-visible .phone--left & > *:nth-child(1) {
     animation: fade-up 0.85s $ease-soft 0.85s both;
@@ -1311,5 +1383,190 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   &__heart {
     font-size: 0.875rem;
   }
+}
+
+/* ==========================================================================
+   СНОСКИ — кружок → полоса → текст
+   ========================================================================== */
+
+.anno {
+  position: absolute;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  max-width: 240px;
+
+  z-index: 5;
+  pointer-events: none;
+
+  opacity: 0;
+
+  .phones.is-visible & {
+    animation: anno-in 0.7s $ease-soft both;
+  }
+
+  &__dot {
+    flex: none;
+
+    width: 7px;
+    height: 7px;
+    margin-top: 4px;
+
+    border-radius: 50%;
+
+    background-color: $accent;
+    box-shadow:
+      0 0 0 3px rgba(200, 217, 111, 0.22),
+      0 0 12px rgba(200, 217, 111, 0.55);
+  }
+
+  &__line {
+    flex: none;
+
+    width: 36px;
+    height: 1px;
+    margin-top: 7px;
+
+    background-color: $text;
+    opacity: 0.65;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    min-width: 0;
+
+    b {
+      font-family: $mono;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+
+      color: $text;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+    }
+
+    em {
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: normal;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.005em;
+      line-height: 1.4;
+
+      color: rgba(255, 255, 255, 0.88);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  /* зеркальный — кружок и полоса справа */
+  &--right {
+    flex-direction: row-reverse;
+
+    .anno__text {
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
+}
+
+/* --- позиции сносок внутри stage --- */
+
+.anno--duo {
+  left: 0;
+  top: 0;
+
+  .phones.is-visible & { animation-delay: 0.4s; }
+}
+
+.anno--gradient {
+  right: 0;
+  top: 0;
+
+  .phones.is-visible & { animation-delay: 0.55s; }
+}
+
+.anno--light {
+  left: 0;
+  top: 42%;
+
+  .phones.is-visible & { animation-delay: 1.1s; }
+}
+
+.anno--dark {
+  right: 0;
+  top: 42%;
+
+  .phones.is-visible & { animation-delay: 1.25s; }
+}
+
+.anno--accent {
+  right: 0;
+  top: 14%;
+
+  .phones.is-visible & { animation-delay: 1.55s; }
+}
+
+.anno--offset {
+  left: 0;
+  bottom: 0;
+
+  .phones.is-visible & { animation-delay: 1.4s; }
+}
+
+.anno--ux {
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+
+  max-width: 300px;
+
+  .phones.is-visible & { animation-delay: 1.7s; }
+
+  .anno__text {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   АДАПТИВ — zoom ТОЛЬКО на сцену, сноски на мобилке скрыты
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .phones__stage { zoom: 0.88; }
+  .anno { max-width: 200px; }
+  .anno__text em { font-size: 0.6875rem; }
+}
+
+@media (max-width: 900px) {
+  .phones__stage { zoom: 0.78; }
+  .anno { max-width: 180px; }
+}
+
+@media (max-width: 820px) {
+  /* Сноски на мобилке не нужны */
+  .anno { display: none !important; }
+}
+
+@media (max-width: 720px) {
+  .phones__stage { zoom: 0.66; }
+}
+
+@media (max-width: 560px) {
+  .phones__stage { zoom: 0.55; }
+}
+
+@media (max-width: 440px) {
+  .phones__stage { zoom: 0.46; }
+}
+
+@media (max-width: 360px) {
+  .phones__stage { zoom: 0.40; }
 }
 </style>

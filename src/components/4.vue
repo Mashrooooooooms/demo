@@ -357,12 +357,12 @@ import {
  * 4.vue — четвёртый блок.
  *
  * Мобильная версия:
- *  · вместо двух колонок (клиент / админ) — тоглер сверху;
- *  · показывает одну сторону, вторая скрыта;
- *  · zoom-скейл убран, вёрстка перестраивается на flex-колонку;
- *  · composition на мобилке — вертикальный стек (телефон над монитором).
- *
- * Скролл в мониторах работает (overflow-y: auto + overscroll-behavior: contain).
+ *  · тоглер «Клиент / Админ» сверху;
+ *  · показывается одна сторона;
+ *  · телефон накладывается поверх монитора (правый нижний угол для клиента,
+ *    левый нижний — для админа), свисая вниз;
+ *  · таблица в админ-мониторе сжимается с 5 до 4 колонок (дата убирается);
+ *  · всё умещается в один экран без внешнего скролла.
  */
 
 const root = ref(null)
@@ -1712,13 +1712,13 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* ==========================================================================
-   МОБИЛЬНАЯ ВЕРСИЯ — тоглер «Клиент / Админ», без zoom-скейла
+   МОБИЛЬНАЯ ВЕРСИЯ — тоглер «Клиент / Админ», телефон поверх монитора
    ========================================================================== */
 
 @media (max-width: 900px) {
 
   .cabinet {
-    padding: 3vh 4vw;
+    padding: 2.5vh 4vw;
   }
 
   /* --- Тоглер --- */
@@ -1729,7 +1729,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     display: flex;
     gap: 6px;
 
-    margin: 0 0 16px;
+    margin: 0 0 12px;
 
     padding: 4px;
 
@@ -1751,7 +1751,7 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     justify-content: center;
     gap: 8px;
 
-    padding: 9px 12px;
+    padding: 8px 12px;
 
     font-family: $mono;
     font-size: 0.6875rem;
@@ -1787,117 +1787,277 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     > * { min-width: 0; }
   }
 
-  .flow {
-    display: none;
-  }
-
-  .side.is-hidden-mobile {
-    display: none;
-  }
+  .flow { display: none; }
+  .side.is-hidden-mobile { display: none; }
 
   .side {
     width: 100%;
     align-items: stretch;
-    gap: 12px;
+    gap: 8px;
   }
 
   .side__head {
     justify-content: center;
+    font-size: 0.75rem;
   }
 
+  /* --- Композиция: монитор во всю ширину, телефон поверх --- */
   .composition {
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
+    position: relative;
+
+    display: block;
+
+    width: 100%;
 
     transform: none;
 
-    .side--client & { flex-direction: column; }
-    .side--admin  & { flex-direction: column; }
+    padding-bottom: 42px; /* запас под свисающий телефон */
   }
 
-  /* --- Монитор --- */
   .monitor {
     width: 100%;
     max-width: 100%;
   }
 
   .monitor__screen {
-    border-width: 8px;
-    border-radius: 12px;
+    border-width: 6px;
+    border-radius: 10px;
+    aspect-ratio: 16 / 11;
   }
 
   .monitor__bar {
-    height: 26px;
-    padding: 0 10px;
+    height: 22px;
+    padding: 0 8px;
 
-    em { font-size: 0.625rem; }
+    em { font-size: 0.5625rem; margin-left: 6px; }
 
-    span { width: 8px; height: 8px; }
+    span { width: 6px; height: 6px; }
   }
 
   .monitor__content {
-    padding: 16px;
-    gap: 12px;
+    padding: 12px;
+    gap: 10px;
   }
 
-  .monitor__neck { width: 70px; height: 16px; }
-  .monitor__base { width: 140px; height: 7px; }
+  .monitor__neck { width: 60px; height: 12px; }
+  .monitor__base { width: 110px; height: 6px; }
 
-  /* --- Клиентский монитор: колонка вместо row --- */
+  /* --- Клиентский монитор: колонка --- */
   .monitor__content--client {
     flex-direction: column !important;
-    gap: 14px !important;
+    gap: 10px !important;
   }
 
   .dash__hero {
     flex: 0 0 auto;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 7;
+    border-radius: 10px;
   }
+
+  .dash__hero-copy { left: 12px; right: 12px; bottom: 10px; }
+  .dash__kicker { font-size: 0.625rem; }
+  .dash__title { font-size: 1.25rem; }
 
   .dash__form {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+
+    .btn--wide {
+      grid-column: 1 / -1;
+      margin-top: 4px;
+      padding: 9px 12px;
+      font-size: 0.75rem;
+    }
   }
 
-  /* --- Админский монитор: таблица компактнее --- */
+  .fld {
+    gap: 2px;
+
+    label { font-size: 0.5rem; letter-spacing: 0.12em; }
+    span  { font-size: 0.8125rem; }
+  }
+
+  .inline-input {
+    font-size: 0.8125rem;
+    padding: 1px 0;
+  }
+
+  /* --- Админский монитор: компактная таблица (4 колонки) --- */
+  .monitor__content--admin {
+    gap: 8px !important;
+  }
+
+  .table__head {
+    padding-bottom: 6px;
+
+    span { font-size: 0.9375rem; }
+    em { font-size: 0.5625rem; }
+  }
+
+  .tabs {
+    padding: 2px;
+  }
+
+  .tab {
+    padding: 5px 8px;
+    font-size: 0.5625rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* Прячем колонку «Дата» — 5 → 4 колонки */
   .table__row {
-    grid-template-columns: 1.3fr 0.7fr 0.9fr 0.7fr 1fr;
-    gap: 6px;
+    grid-template-columns: 1.5fr 0.7fr 0.8fr 1fr;
+    gap: 4px;
 
-    padding: 8px 10px;
+    padding: 6px 8px;
 
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
+
+    > span:nth-child(3) { display: none; }
   }
 
   .table__row--head {
-    font-size: 0.5625rem;
-    padding: 4px 10px;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
   }
 
-  .table__name { font-size: 0.8125rem; }
+  .table__name { font-size: 0.75rem; }
+
+  .status {
+    font-size: 0.5rem;
+    padding: 2px 5px;
+    letter-spacing: 0.06em;
+  }
 
   .table__actions {
-    gap: 8px;
+    gap: 6px;
   }
 
-  /* --- Телефоны под мониторами, узкие --- */
+  .btn--sm {
+    padding: 7px 10px;
+    font-size: 0.6875rem;
+  }
+
+  /* --- Телефон: поверх монитора, свисает вниз --- */
   .phone {
-    width: 150px;
-    margin: 0 auto;
+    position: absolute;
+    bottom: 0;
+
+    width: 100px;
+
+    z-index: 10;
+
+    /* Убираем анимацию сдвига с transform — phone теперь позиционируется абсолютно */
+    .cabinet.is-visible & {
+      animation: fade-in 0.9s $ease-soft 0.8s both;
+    }
   }
 
-  /* --- Подписи-ноты по центру --- */
+  .side--client .phone {
+    right: 10px;
+    left: auto;
+  }
+
+  .side--admin .phone {
+    left: 10px;
+    right: auto;
+  }
+
+  .phone__screen {
+    border-width: 5px;
+    border-radius: 18px;
+  }
+
+  .phone__notch {
+    width: 38px;
+    height: 11px;
+    top: 5px;
+  }
+
+  .phone__hero {
+    height: 24%;
+  }
+
+  .phone__hero-title {
+    left: 8px;
+    right: 8px;
+    bottom: 6px;
+    font-size: 0.6875rem;
+  }
+
+  .phone__body {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .fld--sm {
+    label { font-size: 0.4375rem; letter-spacing: 0.1em; }
+    span  { font-size: 0.6875rem; }
+  }
+
+  .inline-input--sm { font-size: 0.6875rem; }
+
+  .chips { gap: 3px; }
+  .chip { padding: 3px 6px; font-size: 0.5rem; }
+
+  .dates { gap: 3px; }
+  .date {
+    padding: 5px 0;
+    border-radius: 7px;
+    b { font-size: 0.75rem; }
+    em { font-size: 0.4375rem; }
+  }
+
+  .slots { gap: 3px; }
+  .slot {
+    padding: 5px 2px;
+    font-size: 0.5rem;
+    border-radius: 7px;
+  }
+
+  .phone .btn {
+    padding: 7px 10px;
+    font-size: 0.5625rem;
+  }
+
+  .mini {
+    padding: 6px;
+    gap: 6px;
+    grid-template-columns: 22px 1fr auto;
+    border-radius: 8px;
+  }
+
+  .mini__avatar {
+    width: 22px;
+    height: 22px;
+    font-size: 0.5625rem;
+  }
+
+  .mini__body {
+    b { font-size: 0.6875rem; }
+    em { font-size: 0.5rem; }
+  }
+
+  .phone .status {
+    font-size: 0.4375rem;
+    padding: 2px 5px;
+  }
+
+  /* --- Ноты под композицией --- */
   .side .note {
     justify-content: center;
     text-align: center;
 
+    font-size: 0.5625rem;
+
     &__text { white-space: normal; }
+    &__line { width: 30px; }
   }
 
   /* --- Подпись в углу --- */
   .cabinet__sign {
-    font-size: 0.625rem;
+    font-size: 0.5625rem;
   }
 }
 
@@ -1906,24 +2066,35 @@ $ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   .cabinet__title { font-size: 2rem; }
 
-  .monitor__content--admin {
-    padding: 12px;
-  }
+  .monitor__screen { aspect-ratio: 16 / 12; }
+
+  .monitor__content { padding: 10px; }
+
+  .dash__title { font-size: 1.125rem; }
+  .dash__hero { aspect-ratio: 16 / 8; }
 
   .table__row {
-    grid-template-columns: 1.4fr 0.7fr 0.9fr 0.7fr 0.9fr;
-    font-size: 0.6875rem;
+    grid-template-columns: 1.4fr 0.6fr 0.8fr 1fr;
+    font-size: 0.625rem;
+    padding: 5px 6px;
   }
 
   .table__row--head {
-    font-size: 0.5rem;
+    font-size: 0.4375rem;
   }
 
   .status {
-    font-size: 0.5rem;
-    padding: 2px 6px;
+    font-size: 0.4375rem;
+    padding: 1px 4px;
   }
 
-  .phone { width: 130px; }
+  .phone {
+    width: 88px;
+  }
+
+  .phone__screen {
+    border-width: 4px;
+    border-radius: 16px;
+  }
 }
 </style>
