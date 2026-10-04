@@ -1,0 +1,97 @@
+/* ==========================================================================
+   ВСЕ ЗНАЧЕНИЯ ПРОЕКТА — ТОЛЬКО ЗДЕСЬ
+   ========================================================================== */
+
+// --- Цвета ---
+$color-bg:     #ffffff;
+$color-text:   #0d0d0d;
+$color-muted:  #6b7280;
+$color-border: #e5e5e5;
+$color-accent: #4d6bfe;
+
+// --- Типографика ---
+$font-family-base:   system-ui, -apple-system, "Segoe UI", Roboto,
+                     "Helvetica Neue", Arial, sans-serif;
+$font-size-base:     16px;
+$font-size-title:    1.125rem;
+$font-weight-base:   400;
+$font-weight-title:  600;
+$line-height-base:   1.5;
+$font-size-adjust:   100%;
+
+// --- Базовые размеры ---
+$size-zero:    0;
+$size-full:    100%;
+$size-1px:     1px;
+
+// --- Единицы вьюпорта ---
+$viewport-height:         100vh;
+$viewport-height-dynamic: 100dvh;
+
+// --- Отступы / паддинги ---
+$space-sm: 12px;
+$space-md: 16px;
+$safe-area-fallback: 0px;
+
+// --- Границы ---
+$border-width: $size-1px;
+$border-style: solid;
+
+// --- Flex ---
+$flex-none: 0 0 auto;
+$flex-grow: 1 1 auto;
+$flex-fill: 1 1 0;
+
+// --- Overflow / скролл ---
+$overflow-hidden: hidden;
+$overflow-y:      auto;
+$scroll-touch:    touch;
+
+// --- Scroll Snap ---
+$snap-type:  y mandatory;
+$snap-align: start;
+$snap-stop:  always;
+$overscroll: contain;
+
+// --- Формы ---
+$textarea-resize: vertical;
+
+// --- Фон ---
+$bg-image:    url("/bg.jpg");
+$bg-size:     cover;
+$bg-position: center;
+$bg-repeat:   no-repeat;
+
+// --- Hero (компонент 1.vue) ---
+$hero-name:            "Étude";
+$hero-padding-x:       8vw;
+$hero-padding-bottom:  8vh;
+$hero-padding-top:     8vh;
+$hero-gap:             4vw;
+
+$hero-title-size:      14vw;
+$hero-title-size-min:  3.5rem;
+$hero-title-size-max:  12rem;
+$hero-title-weight:    300;
+$hero-title-spacing:   -0.04em;
+$hero-title-leading:   0.9;
+
+$hero-subtitle-size:      0.875rem;
+$hero-subtitle-weight:    400;
+$hero-subtitle-spacing:   0.28em;
+$hero-subtitle-transform: uppercase;
+
+$hero-meta-size:       0.75rem;
+$hero-meta-spacing:    0.2em;
+$hero-meta-transform:  uppercase;
+$hero-meta-leading:    1.8;
+
+$hero-line-width:   $size-1px;
+$hero-line-height:  6rem;
+$hero-line-opacity: 0.35;
+
+// --- Доступность ---
+$reduced-anim-duration:  0.01ms !important;
+$reduced-anim-iteration: 1      !important;
+$reduced-transition:     0.01ms !important;
+$reduced-scroll:         auto   !important;

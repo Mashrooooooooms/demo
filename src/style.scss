@@ -1,0 +1,124 @@
+@use "./styles/variables" as *;
+
+/* ==========================================================================
+   CSS-переменные (для scoped-стилей в компонентах)
+   ========================================================================== */
+
+:root {
+  --color-bg:     #{$color-bg};
+  --color-text:   #{$color-text};
+  --color-muted:  #{$color-muted};
+  --color-border: #{$color-border};
+  --color-accent: #{$color-accent};
+}
+
+/* ==========================================================================
+   RESET
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: $size-zero;
+  padding: $size-zero;
+}
+
+html {
+  height: $size-full;
+  line-height: $line-height-base;
+  -webkit-text-size-adjust: $font-size-adjust;
+  text-size-adjust: $font-size-adjust;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  height: $size-full;
+  min-height: $size-full;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  color: $color-text;
+  background-color: $color-bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+#app {
+  width: $size-full;
+  height: $size-full;
+  min-height: $size-full;
+}
+
+// Медиа
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: $size-full;
+}
+
+// Формы
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: $size-zero;
+  cursor: pointer;
+}
+
+textarea {
+  resize: $textarea-resize;
+}
+
+// Типографика
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+p,
+h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: $size-zero;
+}
+
+/* ==========================================================================
+   Уважаем «уменьшить движение»
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:        $reduced-anim-duration;
+    animation-iteration-count: $reduced-anim-iteration;
+    transition-duration:       $reduced-transition;
+    scroll-behavior:           $reduced-scroll;
+  }
+}
