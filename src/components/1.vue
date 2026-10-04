@@ -91,7 +91,13 @@
  * Сноска "Заголовок" смещена вниз на 3rem от центра,
  * сноска "Подзаголовок" — на 1.5rem от центра (чуть выше заголовка).
  * Градиент снизу чуть темнее.
- * На мобилке тёмная часть занимает больше половины экрана.
+ *
+ * На мобилке:
+ *  · тёмная часть занимает больше половины экрана;
+ *  · сноски полностью скрываются;
+ *  · у .hero нет собственного скролла — иначе он перехватывает
+ *    touch-жест и блокирует scroll-snap у родителя (.main__content).
+ *    Вместо этого блок ровно занимает свою ячейку grid (height: 100%).
  */
 
 defineProps({
@@ -420,18 +426,28 @@ $line-opacity: 0.5;
 @media (max-width: 820px) {
   .hero {
     flex-direction: column;
-    height: auto;
-    min-height: 100%;
+    justify-content: flex-end;   /* контент прижат к низу */
+    height: 100%;                /* ровно ячейка grid, без auto */
+    min-height: 0;               /* не тянем блок выше */
     padding: 6vh 6vw;
 
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
+    /* ВАЖНО: собственный скролл у hero НЕ заводим.
+       overflow-y: auto + overscroll-behavior: contain перехватывают
+       touch-жест и ломают scroll-snap у .main__content. */
   }
 
   /* --- Тёмный градиент выше: > половины экрана --- */
   .hero__overlay {
     background-image: $overlay-gradient-mobile;
+  }
+
+  /* --- Сноски на мобилке полностью скрываем --- */
+  .anno {
+    display: none !important;
+  }
+
+  .hero__left {
+    justify-content: flex-end;
   }
 
   .hero__text-block {
@@ -448,35 +464,6 @@ $line-opacity: 0.5;
 
   .hero__meta {
     text-align: left;
-  }
-
-  /* --- сноски: статично, столбиком под контентом --- */
-
-  .anno {
-    position: static;
-    transform: none;
-    max-width: 100%;
-
-    margin-top: 16px;
-    padding-top: 12px;
-
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-  }
-
-  .anno--side {
-    margin-left: 0;
-    width: auto;
-    max-width: 100%;
-  }
-
-  /* убираем зеркальность */
-  .anno--right {
-    flex-direction: row;
-
-    .anno__text {
-      align-items: flex-start;
-      text-align: left;
-    }
   }
 }
 </style>
