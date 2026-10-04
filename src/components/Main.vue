@@ -12,7 +12,10 @@
       <BlockThree />
       <BlockFour />
       <BlockFive />
+      <BlockSeven />
       <BlockSix />
+      
+      
     </main>
 
     <footer class="main__footer">
@@ -36,6 +39,7 @@ import BlockTwo from "./3.vue";
 import BlockFour  from "./4.vue";
 import BlockFive  from "./5.vue";
 import BlockSix from "./6.vue"
+import BlockSeven from "./7.vue"
 </script>
 
 <style scoped lang="scss">
